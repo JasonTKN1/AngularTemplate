@@ -1,0 +1,33 @@
+.site-wrapper {
+    .login {
+      text-align: center;
+      form {
+        max-width: 450px;
+        margin: 10px auto;
+        border: 1px solid lightgray;
+        border-radius: 25px;
+        background-color: rgb(228, 220, 220);
+        padding: 30px;
+        text-align: left;
+  
+        .form-group {
+          label {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+  .header{
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .row{
+    margin-top: 10px;
+  }
+  
+  .error{
+    color: red;
+  }
