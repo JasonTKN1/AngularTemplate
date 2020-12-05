@@ -27,15 +27,20 @@ export class NavbarComponent implements OnInit {
     private staffService: StaffService) { }
 
   ngOnInit(): void {
-    
     this.isLogin = this.sessionService.getIsLogin();
+    if(!this.isLogin){
+      this.router.navigate(["/ui/login"]);
+    }
+    
+    
     this.decodedToken = this.jwtHelper.decodeToken(this.sessionService.getAccessToken());
 
     // console.log("decoded " + JSON.stringify(this.decodedToken));
     console.log(this.sessionService.getAccessToken())
     let token = this.sessionService.getAccessToken();
+    
     //Write codes to extend session
-    if (this.decodedToken.exp > Date.now() / 1000) {
+    if (this.decodedToken.exp < Date.now() / 1000) {
       var r = window.confirm("session already timeout. Do you wanna extend?");
       if (r === true) {
         this.staffService.extendSession(token).subscribe(

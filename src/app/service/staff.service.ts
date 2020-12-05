@@ -5,7 +5,10 @@ import { catchError } from 'rxjs/operators';
 
 
 const httpOptions = {
-	headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+	headers: new HttpHeaders({
+		'Content-Type': 'application/json'
+	})
+
 };
 
 const httpOptions2 = {
@@ -23,7 +26,7 @@ const httpOptions1 = {
 };
 
 
- 
+
 
 
 @Injectable({
@@ -40,18 +43,34 @@ export class StaffService {
 			"username": email,
 			"password": password
 		};
-		return this.httpClient.post<any>(this.baseUrl + "/login?", credentials, httpOptions2).pipe
+		return this.httpClient.post<any>(this.baseUrl + "/login?",
+			credentials,
+			httpOptions2).pipe
 			(
 				catchError(this.handleError)
 			);
 	}
+
+	validateForm(formData: FormData): Observable<any> {
+		var reqHeader = new HttpHeaders({
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + sessionStorage.token,
+		});
+		return this.httpClient.post<any>(
+			this.baseUrl + "/validateForm", formData,
+			{ headers: reqHeader, responseType: 'text' as 'json' }).pipe
+			(
+				catchError(this.handleError)
+			);
+	}
+
 	extendSession(accessToken: string): Observable<any> {
-		
-		var reqHeader = new HttpHeaders({ 
+		var reqHeader = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Authorization': 'Bearer ' + accessToken,
-		 });
-		return this.httpClient.get<any>(this.baseUrl + "/extendSession", { headers: reqHeader, responseType: 'text' as 'json' }).pipe
+		});
+		return this.httpClient.get<any>(this.baseUrl + "/extendSession",
+			{ headers: reqHeader, responseType: 'text' as 'json' }).pipe
 			(
 				catchError(this.handleError)
 			);
