@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
+
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { SessionService } from '../../service/session.service';
@@ -21,6 +23,7 @@ export class LoginComponent implements OnInit {
     public sessionService: SessionService,
     public staffService: StaffService,
     private router: Router,
+    private jwtService: JwtModule,
     private activatedRoute: ActivatedRoute,
   ) {
   }

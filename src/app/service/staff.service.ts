@@ -5,33 +5,37 @@ import { catchError } from 'rxjs/operators';
 
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+	headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 const httpOptions2 = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  responseType: 'text' as 'json'
+	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+	responseType: 'text' as 'json'
 };
 
 const httpOptions1 = {
-	headers: new HttpHeaders ({
-	 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	 'Accept': 'application/json',
-	 'Authorization':  'xxxxx' 
+	headers: new HttpHeaders({
+		'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+		'Accept': 'application/json',
+		'Authorization': 'xxxxx'
 	}),
-	'withCredentials': true
+	'withCredentials': true //
 };
 
+
+ 
+
+
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class StaffService {
 
-  baseUrl: string = "http://localhost:8888"
+	baseUrl: string = "http://expressbackend-env.eba-mmzyvbbv.us-east-1.elasticbeanstalk.com"
 
-  constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string): Observable<any> {
+	login(email: string, password: string): Observable<any> {
 		let credentials = {
 			"username": email,
 			"password": password
@@ -41,9 +45,19 @@ export class StaffService {
 				catchError(this.handleError)
 			);
 	}
+	extendSession(accessToken: string): Observable<any> {
+		
+		var reqHeader = new HttpHeaders({ 
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + accessToken,
+		 });
+		return this.httpClient.get<any>(this.baseUrl + "/extendSession", { headers: reqHeader, responseType: 'text' as 'json' }).pipe
+			(
+				catchError(this.handleError)
+			);
+	}
 
-
-  private handleError(error: HttpErrorResponse) {
+	private handleError(error: HttpErrorResponse) {
 		let errorMessage: string = "";
 
 		if (error.error instanceof ErrorEvent) {
