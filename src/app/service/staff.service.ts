@@ -51,13 +51,13 @@ export class StaffService {
 			);
 	}
 
-	validateForm(formData: FormData): Observable<any> {
+	validateForm(val: FormData, accessToken: string): Observable<any> {
 		var reqHeader = new HttpHeaders({
-			'Content-Type': 'application/json',
-			'Authorization': 'Bearer ' + sessionStorage.token,
+			// 'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + accessToken,
 		});
 		return this.httpClient.post<any>(
-			this.baseUrl + "/validateForm", formData,
+			this.baseUrl + "/validateForm", val,
 			{ headers: reqHeader, responseType: 'text' as 'json' }).pipe
 			(
 				catchError(this.handleError)

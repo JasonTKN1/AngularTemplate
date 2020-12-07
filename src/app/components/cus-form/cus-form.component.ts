@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from "@angular/router";
 import { StaffService } from '../../service/staff.service';
+import { SessionService } from '../../service/session.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class CusFormComponent implements OnInit {
 
   constructor(
     public staffService: StaffService,
+    public sessionService: SessionService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -73,9 +75,13 @@ export class CusFormComponent implements OnInit {
       ]),
       image: new FormControl('', [
         Validators.required,
+        Validators.pattern(/\.(jpg|jpeg|PNG)$/)
       ]),
-      productType: this.fb.array([], [Validators.required])
-
+      fileSource: new FormControl('', [
+        Validators.required
+      ]),
+      productType: this.fb.array([], [Validators.required]),
+      registrationTime: new FormControl('12/12/2012 12:12:12'),
     }, { updateOn: 'blur' })
   }
 
@@ -83,13 +89,49 @@ export class CusFormComponent implements OnInit {
   get customerAge() { return this.customerForm.get('customerAge'); }
   get serviceOfficerName() { return this.customerForm.get('serviceOfficerName'); }
   get nric() { return this.customerForm.get('nric'); }
+  get image() { return this.customerForm.get('image'); }
+
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.customerForm.patchValue({
+        fileSource: file
+      });
+    }
+  }
 
 
   onBoard(): void {
-    console.log("submit form" + JSON.stringify(this.customerForm.value));
+    console.log(this.customerForm.value.fileSource);
     let value = this.customerForm.value;
 
+    const formData = new FormData();
+
+    formData.append("customerName", this.customerForm.value.customerName);
+    formData.append("customerAge", this.customerForm.value.customerAge);
+    formData.append("serviceOfficerName", this.customerForm.value.serviceOfficerName);
+    formData.append("NRIC", this.customerForm.value.nric);
+    formData.append("registrationTime", "12/12/2012 12:12:12");
+    formData.append("branchCode", this.customerForm.value.branchCode);
+    formData.append("image", this.customerForm.get('fileSource').value);
+    formData.append("productType", this.customerForm.value.productType);
+
     //Retrieve value from form
+    this.staffService.validateForm(formData, this.sessionService.getAccessToken()).subscribe(
+      response => {
+        console.log("response " + response);
+        if (response != null) {
+          this.loginError = false;
+          this.router.navigate(["/ui/cusForm"]);
+        }
+        else {
+          this.loginError = true;
+        }
+      },
+      error => {
+        this.loginError = true;
+        this.errorMessage = error
+      });
 
 
   }
