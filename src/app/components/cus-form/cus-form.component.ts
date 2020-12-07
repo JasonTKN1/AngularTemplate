@@ -25,6 +25,14 @@ export class CusFormComponent implements OnInit {
   errorMessage: string = '';
   loginError: boolean;
 
+
+  appendLeadingZeroes(n) {
+    if (n <= 9) {
+      return "0" + n;
+    }
+    return n;
+  }
+
   constructor(
     public staffService: StaffService,
     public sessionService: SessionService,
@@ -81,8 +89,9 @@ export class CusFormComponent implements OnInit {
         Validators.required
       ]),
       productType: this.fb.array([], [Validators.required]),
-      registrationTime: new FormControl('12/12/2012 12:12:12'),
+      registrationTime: new FormControl(new Date().toLocaleString('en-GB', { timeZone: 'UTC' })),
     }, { updateOn: 'blur' })
+
   }
 
   get customerName() { return this.customerForm.get('customerName'); }
@@ -90,6 +99,7 @@ export class CusFormComponent implements OnInit {
   get serviceOfficerName() { return this.customerForm.get('serviceOfficerName'); }
   get nric() { return this.customerForm.get('nric'); }
   get image() { return this.customerForm.get('image'); }
+  get branchCode() { return this.customerForm.get('branchCode'); }
 
   onFileChange(event) {
     if (event.target.files.length > 0) {
@@ -102,16 +112,23 @@ export class CusFormComponent implements OnInit {
 
 
   onBoard(): void {
-    console.log(this.customerForm.value.fileSource);
+    // console.log(this.customerForm.value.fileSource);
+    // console.log(this.customerForm.value.registrationTime);
+    console.log(new Date().toLocaleString('en-GB', { timeZone: 'UTC' }));
+    console.log(this.customerForm.value.registrationTime.slice(0, 10) + ' ' + this.customerForm.value.registrationTime.slice(12, 20));
+
     let value = this.customerForm.value;
 
     const formData = new FormData();
+    let d = new Date();
+    let d_format = this.appendLeadingZeroes(d.getDate()) + "/" + this.appendLeadingZeroes(d.getMonth() + 1) + "/" + d.getFullYear() + " " + this.appendLeadingZeroes(d.getHours()) + ":" + this.appendLeadingZeroes(d.getMinutes()) + ":" + this.appendLeadingZeroes(d.getSeconds());
+    // console.log(d_format);
 
     formData.append("customerName", this.customerForm.value.customerName);
     formData.append("customerAge", this.customerForm.value.customerAge);
     formData.append("serviceOfficerName", this.customerForm.value.serviceOfficerName);
     formData.append("NRIC", this.customerForm.value.nric);
-    formData.append("registrationTime", "12/12/2012 12:12:12");
+    formData.append("registrationTime", this.customerForm.value.registrationTime.slice(0, 10) + ' ' + this.customerForm.value.registrationTime.slice(12, 20));
     formData.append("branchCode", this.customerForm.value.branchCode);
     formData.append("image", this.customerForm.get('fileSource').value);
     formData.append("productType", this.customerForm.value.productType);
