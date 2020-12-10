@@ -14,9 +14,11 @@
                 <label>Password</label>
                 <input type="password" id="password" class="form-control" formControlName="password" required="true"
                 title="This field value must be valid password" maxlength="64" minlength="0">
-                <label class="error">{{errorMessage}}</label>
               </div>
-              <!-- <button type="submit" class="btn btn-md btn-danger">Login</button> -->
+              <div class="form-group">
+                <input type="checkbox"  id="rememberMe" formControlName="rememberMe"> Remember Me
+              </div>
+              <label class="error">{{errorMessage}}</label>
               <button type="submit" class="btn btn-md btn-danger">Login</button>
             </form>
               <!-- <p>No account yet? <a href="/ui/register">Create an account</a></p> -->

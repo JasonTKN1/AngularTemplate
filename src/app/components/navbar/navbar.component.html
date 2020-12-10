@@ -1,12 +1,12 @@
 <section class="site-header">
     <div class="container">
-        <!-- <div class="col-md-1">
+        <div class="col-md-1">
             <h1 class="logo text-center">
                 <a href="/">
-                    <img src="assets/images/logo.png" alt="logo" />
+                    <img src="assets/images/DBSLogo.png" width="100px" height="100px"alt="logo" />
                 </a>
             </h1>
-        </div> -->
+        </div>
 
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(204, 191, 191);">
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -21,6 +21,7 @@
                     <li class="nav-item">
                         <a class="nav-link" *ngIf="isLogin" (click)="logout()">Logout</a>
                     </li>
+                       
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,6 +39,7 @@
             <!-- <button *ngIf="loggedIn" class="btn btn-md btn-danger" (click)="tryLogout()" icon="fa fa-sign-out" style="margin-left:.25em">Logout</button>  -->
         </nav>
         <hr />
-
+        {{time}}
+        <br/>
     </div>
 </section>

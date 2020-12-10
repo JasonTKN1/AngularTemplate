@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { environment } from '../environments/environment';
+
 import { FormsModule }    from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
@@ -24,16 +26,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CusFormComponent } from './components/cus-form/cus-form.component';
 
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBwXL8N5IXD0FBBKu1sJHtTzEvPzUO4xgc",
-  authDomain: "react-template-521ee.firebaseapp.com",
-  databaseURL: "https://react-template-521ee.firebaseio.com",
-  projectId: "react-template-521ee",
-  storageBucket: "react-template-521ee.appspot.com",
-  messagingSenderId: "644150921085",
-  appId: "1:644150921085:web:db19fbd0e2f560e5e3ae14",
-  measurementId: "G-Y88XXJFD9Q"
-};
 
 
 @NgModule({
@@ -49,7 +41,7 @@ var firebaseConfig = {
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage

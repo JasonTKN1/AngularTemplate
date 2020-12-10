@@ -28,16 +28,17 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      password: new FormControl('', [
+      password: new FormControl(this.sessionService.getPassword(), [
         Validators.required,
         Validators.minLength(0),
         Validators.maxLength(64)
       ]),
-      email: new FormControl('', [
+      email: new FormControl(this.sessionService.getUsername(), [
         Validators.required,
         Validators.minLength(0),
         Validators.maxLength(64)
-      ])
+      ]),
+      rememberMe: new FormControl(this.sessionService.getRememberMe()),
     }, { updateOn: 'blur' })
 
   }
@@ -48,14 +49,19 @@ export class LoginComponent implements OnInit {
     console.log("submit form");
 
     //Retrieve value from form
-
-    console.log(this.sessionService.getUsername());
     this.staffService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe(
       response => {
         // console.log("response " + response);
         if (response != null) {
-          this.sessionService.setUsername(this.loginForm.value.email);
-          this.sessionService.setPassword(this.loginForm.value.password);
+          if (this.loginForm.value.rememberMe == true) {
+            this.sessionService.setUsername(this.loginForm.value.email);
+            this.sessionService.setPassword(this.loginForm.value.password);
+            this.sessionService.setRememberMe(true);
+          } else {
+            this.sessionService.setUsername("");
+            this.sessionService.setPassword("");
+            this.sessionService.setRememberMe(false);
+          }
           this.sessionService.setIsLogin(true);
           this.sessionService.setAccessToken(response);
           console.log(this.sessionService.getUsername());
